@@ -9,7 +9,7 @@ import pandas as pd
 import numpy as np
 
 # Constants for crawl_page part
-DOWNLOAD_DIR = "downloads"  # Changed to be relative to project root
+DOWNLOAD_DIR = "src/downloads"  # Changed to be relative to project root
 
 # Ensure download folder exists
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
@@ -164,6 +164,8 @@ class ResearchExpenseCleaner(BaseCleaner):
         super().__init__(download_dir)
 
     def clean_data_before_2020(self, filename, year):
+        year = int(year)
+        print(filename, year)
         df = pd.read_excel(os.path.join(self.download_dir, filename), header=1)
         # Drop all empty columns
         df = df.dropna(axis=1, how='all')
@@ -181,14 +183,17 @@ class ResearchExpenseCleaner(BaseCleaner):
         }
         if year == 2010 or year == 2013 or year == 2014:
             merged_headers['研究開発'] = 10
-        
-        if year == 2011 or year == 2012 or year == 2013:
-            # Remove rows 0 
-            df = df.iloc[1:].reset_index(drop=True)
+            if year == 2010:
+                # Remove rows 0 to 1
+                df = df.iloc[2:].reset_index(drop=True)
         else:
-            # Remove rows 0 to 2
+            if year < 2011 or year > 2013:
+                # Remove rows 0 to 2
+                df = df.iloc[2:].reset_index(drop=True)
+        if year == 2014:
+            # Remove rows 0 to 1
             df = df.iloc[2:].reset_index(drop=True)
-        
+    
         # Remove all whitespaces from the dataframe
         df.replace(to_replace=r'\s+', value='', regex=True, inplace=True)
         
@@ -228,7 +233,7 @@ class ResearchExpenseCleaner(BaseCleaner):
         df = df.drop(columns=[df.columns[0], df.columns[2], df.columns[3]])
         df.iloc[0, 0] = "産業"
         header_rows = df.iloc[:6].fillna('').astype(str)
-        header = header_rows.apply(lambda x: '_'.join(x).replace('__', '_').rstrip('_'), axis=0)
+        header = header_rows.apply(lambda x: '_'.join(x).replace('__', '_').replace('__', '_').rstrip('_').rstrip('_社'), axis=0)
         df.columns = header
         df = df.iloc[5:].reset_index(drop=True)
         df = df.iloc[7:].reset_index(drop=True)
@@ -282,7 +287,7 @@ class PatentCountCleaner(BaseCleaner):
         # Process the first five rows to create a single header row
         df.iloc[0,0] = "産業"
         header_rows = df.iloc[:6].fillna('').astype(str)
-        header = header_rows.apply(lambda x: '_'.join(x).replace('__', '_').rstrip('_'), axis=0)
+        header = header_rows.apply(lambda x: '_'.join(x).replace('__', '_').replace('__', '_').rstrip('_'), axis=0)
 
         # Update the dataframe with the new header
         df.columns = header
@@ -301,7 +306,7 @@ class PatentCountCleaner(BaseCleaner):
         df = df.drop(columns=[df.columns[0], df.columns[2], df.columns[3]])
         df.iloc[0,0] = "産業"
         header_rows = df.iloc[:6].fillna('').astype(str)
-        header = header_rows.apply(lambda x: '_'.join(x).replace('__', '_').replace('__', '_').rstrip('_'), axis=0)
+        header = header_rows.apply(lambda x: '_'.join(x).replace('__', '_').replace('__', '_').rstrip('_').rstrip('_社'), axis=0)
         header = header.str.replace('特許権_件数_所有数_件', '特許権_件数_所有数', regex=True)
 
         df.columns = header
@@ -340,7 +345,7 @@ class DataCleaner:
         # Call each cleaning function here
         self.clean_labor_number_data()
         # Add other cleaning functions as needed
-        self.ResearchExpenseDict = self.research_expense_cleaner.clean_data(target_str="研究開発費及び売上高比率、受託研究費、研究開発投資、能力開発費")
+        self.ResearchExpenseDict = self.research_expense_cleaner.clean_data(target_str="研究開発投資")
         self.PatentCountDict = self.patent_count_cleaner.clean_data(target_str="産業別、企業数、特許権、実用新案権、意匠権別")
         # Save cleaned data to CSV files
         os.makedirs("data/研究開発費", exist_ok=True)
@@ -606,4 +611,5 @@ def main():
     cleaner.output_visualization(year=2020)
 
 if __name__ == "__main__":
+    pd.set_option('future.no_silent_downcasting', True)
     main()
