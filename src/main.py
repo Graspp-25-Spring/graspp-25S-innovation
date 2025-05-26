@@ -1,5 +1,6 @@
 import time
 import os
+import shutil
 import requests
 import re
 import tqdm
@@ -9,10 +10,8 @@ import pandas as pd
 import numpy as np
 
 # Constants for crawl_page part
-DOWNLOAD_DIR = "src/downloads"  # Changed to be relative to project root
-
-# Ensure download folder exists
-os.makedirs(DOWNLOAD_DIR, exist_ok=True)
+DOWNLOAD_DIR = "data/raw"
+CLEAND_DIR = "data/cleand"
 
 class DataScraper:
     """
@@ -30,7 +29,11 @@ class DataScraper:
         self.base_urls = base_urls
         self.download_dir = download_dir
         self.years = years
-        os.makedirs(self.download_dir, exist_ok=True)
+        
+        # delete existed folder and create download folder
+        if os.path.exists(self.download_dir):
+            shutil.rmtree(self.download_dir)
+        os.makedirs(self.download_dir)
 
     def sanitize_filename(self, text: str) -> str:
         """
@@ -116,25 +119,35 @@ class DataScraper:
             print(f"  → Found {len(items)} EXCEL links")
 
             for url, table_name in tqdm.tqdm(items):
-                if i < len(self.years):
+                if i < len(self.years) and table_name in [
+                        "第10表　産業別、企業数、技術導入件数及び技術供与件数", # get only 2005, 2006
+                        "第10表　産業別、企業数、売上高、研究開発費及び売上高比率、受託研究費、研究開発投資、能力開発費",
+                        "第11表　産業別、企業数、特許権、実用新案権、意匠権別の所有件数及び使用件数",
+                        "3　産業別、売上高経常利益率別常時従業者数"
+                    ]:
                     self.download_file(url, table_name, str(self.years[i]))
                 else:
                     print("Warning: More base URLs than years provided. Skipping year association.")
-                    self.download_file(url, table_name, "")
+                    # self.download_file(url, table_name, "")
 
 class BaseCleaner:
     """
     A base class for cleaning data.
     """
-    def __init__(self, download_dir):
+    def __init__(self, download_dir, cleaned_dir):
         self.download_dir = download_dir
+        self.cleaned_dir = cleaned_dir
 
-    def clean_data(self, target_str: str):
+    def clean_data(self, target_file_name: str):
         """
         Placeholder for data cleaning method.
         """
+        if os.path.exists(self.cleaned_dir + "/" + target_file_name):
+            shutil.rmtree(self.cleaned_dir + "/" + target_file_name)
+        os.makedirs(self.cleaned_dir + "/" + target_file_name)
+
         df_dict = {}
-        file_paths = [fp for fp in os.listdir(self.download_dir) if target_str in fp]
+        file_paths = [fp for fp in os.listdir(self.download_dir) if target_file_name in fp]
         for file_path in file_paths:
             year = int(file_path.split("_")[1])
             if year < 2020:
@@ -160,8 +173,8 @@ class ResearchExpenseCleaner(BaseCleaner):
     """
     A class to clean and process research expense data.
     """
-    def __init__(self, download_dir):
-        super().__init__(download_dir)
+    def __init__(self, download_dir, cleaned_dir):
+        super().__init__(download_dir, cleaned_dir)
 
     def clean_data_before_2020(self, filename, year):
         year = int(year)
@@ -244,8 +257,8 @@ class PatentCountCleaner(BaseCleaner):
     """
     A class to clean and process patent count data.
     """
-    def __init__(self, download_dir):
-        super().__init__(download_dir)
+    def __init__(self, download_dir, cleaned_dir):
+        super().__init__(download_dir, cleaned_dir)
 
     def clean_data_before_2020(self, filename, year):
         df = pd.read_excel(os.path.join(self.download_dir, filename), header=1)
@@ -319,11 +332,12 @@ class DataCleaner:
     """
     A class to clean and process downloaded EXCEL files.
     """
-    def __init__(self, download_dir, font_path='/Library/Fonts/Arial Unicode.ttf'):
+    def __init__(self, download_dir, cleaned_dir, font_path='/Library/Fonts/Arial Unicode.ttf'):
         self.download_dir = download_dir
+        self.cleaned_dir = cleaned_dir
         self.font_path = font_path # visualization use 
-        self.research_expense_cleaner = ResearchExpenseCleaner(download_dir)
-        self.patent_count_cleaner = PatentCountCleaner(download_dir)
+        self.research_expense_cleaner = ResearchExpenseCleaner(download_dir, cleaned_dir)
+        self.patent_count_cleaner = PatentCountCleaner(download_dir, cleaned_dir)
         
     def sanitize_filename(self, text: str) -> str:
         """
@@ -343,17 +357,15 @@ class DataCleaner:
         Clean all data from the downloaded files.
         """
         # Call each cleaning function here
-        self.clean_labor_number_data()
-        # Add other cleaning functions as needed
-        self.ResearchExpenseDict = self.research_expense_cleaner.clean_data(target_str="研究開発投資")
-        self.PatentCountDict = self.patent_count_cleaner.clean_data(target_str="産業別、企業数、特許権、実用新案権、意匠権別")
-        # Save cleaned data to CSV files
-        os.makedirs("data/研究開発費", exist_ok=True)
+        self.clean_labor_number_data(target_file_name="3 産業別、売上高経常利益率別常時従業者数")
+        self.ResearchExpenseDict = self.research_expense_cleaner.clean_data(target_file_name="第10表 産業別、企業数、売上高、研究開発費及び売上高比率、受託研究費、研究開発投資、能力開発費")
+        self.PatentCountDict = self.patent_count_cleaner.clean_data(target_file_name="第11表 産業別、企業数、特許権、実用新案権、意匠権別の所有件数及び使用件数")
+
+        # Save cleaned data as CSV files
         for key, df_to_save in self.ResearchExpenseDict.items():
-            df_to_save.to_csv(f"data/研究開発費/{key}.csv", index=True)
-        os.makedirs("data/特許件数", exist_ok=True)
+            df_to_save.to_csv(self.cleaned_dir + "/" + f"第10表 産業別、企業数、売上高、研究開発費及び売上高比率、受託研究費、研究開発投資、能力開発費/{key}.csv", index=True)
         for key, df_to_save in self.PatentCountDict.items():
-            df_to_save.to_csv(f"data/特許件数/{key}.csv", index=True)
+            df_to_save.to_csv(self.cleaned_dir + "/" + f"第11表 産業別、企業数、特許権、実用新案権、意匠権別の所有件数及び使用件数/{key}.csv", index=True)
         
     def output_visualization(self, year=2020):
         """
@@ -466,7 +478,7 @@ class DataCleaner:
         plt.savefig(f"plots/patents_owned_vs_used_{year}.png")
         plt.close()
 
-    def clean_labor_number_data(self):
+    def clean_labor_number_data(self, target_file_name):
         """
         Clean the labor number data from Excel files.
         """
@@ -476,7 +488,11 @@ class DataCleaner:
         # 3. Read and clean each sheet into a DataFrame
         # 4. Save each DataFrame to a CSV file
 
-        filepaths = [fp for fp in os.listdir(self.download_dir) if "産業別、売上高経常利益率別常時従業者数" in fp]
+        if os.path.exists(self.cleaned_dir + "/" + target_file_name):
+            shutil.rmtree(self.cleaned_dir + "/" + target_file_name)
+        os.makedirs(self.cleaned_dir + "/" + target_file_name)
+
+        filepaths = [fp for fp in os.listdir(self.download_dir) if target_file_name in fp]
         for file_path in filepaths:
             year = file_path[-8:-4] # This might need adjustment if timestamp is present
             # Adjust to find year correctly if filename format changed due to timestamp
@@ -576,9 +592,8 @@ class DataCleaner:
                 
                 dfs[f"{year}"] = df
 
-        os.makedirs("data/産業別、売上高経常利益率別常時従業者数", exist_ok=True)
         for key, df_to_save in dfs.items():
-            df_to_save.to_csv(f"data/産業別、売上高経常利益率別常時従業者数/{key}.csv", index=True)
+            df_to_save.to_csv(self.cleaned_dir + "/" + target_file_name + f"/{key}.csv", index=True)
 
 
 def main():
@@ -605,10 +620,10 @@ def main():
 
     # Run data cleaning
     print("\nStarting data cleaning...")
-    cleaner = DataCleaner(DOWNLOAD_DIR)
+    cleaner = DataCleaner(DOWNLOAD_DIR, CLEAND_DIR)
     cleaner.clean_all_data()
     print("Data cleaning complete.")
-    cleaner.output_visualization(year=2020)
+    # cleaner.output_visualization(year=2020)
 
 if __name__ == "__main__":
     pd.set_option('future.no_silent_downcasting', True)
