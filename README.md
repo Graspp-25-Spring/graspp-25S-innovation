@@ -89,6 +89,11 @@ This item is planned to be updated.
 This item is planned to be updated.
 
 There are 3 plots
+Plot Preview (to be updated)
+![image](https://github.com/user-attachments/assets/35ec8161-c31f-44c3-b58d-ee4a70b43639)
+![image](https://github.com/user-attachments/assets/defa6edd-2b1e-455c-a813-1757f478e5c9)
+
+
 
 ### Our Special Challenge
 
