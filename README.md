@@ -21,11 +21,13 @@ On the other hand, a key challenge lies in measuring the extent to which innovat
 
 The analysis aims to investigate the relationship between research and development investment and the number of patents filed in different industrial sectors in Japan.
 
-## (4) Hypothesis
+## (4) Previous Research
+
+## (5) Hypothesis
 
 There is a positive correlation between the amount of R&D spending and the number of patents obtained across industries.
 
-## (5) Data and Variables
+## (6) Data and Variables
 
 ### Data Resources
 
@@ -49,12 +51,12 @@ There is a positive correlation between the amount of R&D spending and the numbe
 
 - $year$ : year 2010 ~ 2021
 - $i$ : Industry $i$
-- $patent_{i, year}$ : R&D expenditure of industry $i$ in year $year$
-- $RDexp_{i, year}$ : The number of patents obtained by industry $i$ in year year$t$
+- $patent_{i, year}$ : The number of patents obtained by industry $i$ in year year$t$R&D expenditure of industry $i$ in year $year$
+- $RDexp_{i, year}$ :
 - $empl_{i, year}$ : Number of employees inindustry $i$ in year $year$
 - $e_{i, year}$ : Error term
 
-## (6) Regression Models
+## (7) Regression Models
 
 ### Simple Regression Model
 
@@ -68,15 +70,15 @@ $$
 patent_{i, year} = const + RDexp_{i, year} + empl_{i, year} + e_{i, year}
 $$
 
-## (7) Regression Analysis
+## (8) Regression Analysis
 
 This item is planned to be updated.
 
-## (8) Conclusion
+## (9) Conclusion
 
 This item is planned to be updated.
 
-## (9) The file path
+## (10) The file path
 
 ### Milestone 1
 
