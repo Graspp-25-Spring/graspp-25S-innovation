@@ -4,9 +4,9 @@
 
 - Yoshiya Bito
 - Kohsuke Sagara
-- Shuma Suzuki
 - Rin Nitta
 - Joseph Chen
+- Shuma Suzuki
 
 ## (2) Our Interests
 
