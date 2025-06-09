@@ -86,7 +86,9 @@ This item is planned to be updated.
 
 ### Milestone 2
 
-`notebooks\assignment_group\HW2\Assignment2.ipynb`
+`notebooks\assignment_group\HW2\Milestone_2.ipynb`
+
+
 
 This item is planned to be updated.
 
