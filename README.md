@@ -8,6 +8,9 @@
 - Joseph Chen
 - Shuma Suzuki
 
+### Responsibilities
+Joseph Chen: Data scraping/cleaning, DVC
+
 ## (2) Our Interests
 
 The primary interest of this group lies in understanding the extent to which innovation can be driven by financial investment.
