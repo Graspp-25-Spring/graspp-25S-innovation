@@ -10,10 +10,13 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 #folds path
 #data path
-DOWNLOAD_DIR = "data/raw"
-CLEAND_DIR = "data/cleand"
-PANELDATA_DIR = "data/paneldata"
-PLOTS_DIR = "plots"
+DOWNLOAD_DIR = "data\\raw"
+CLEAND_DIR = "data\cleand"
+PANELDATA_DIR = "data\paneldata"
+
+PLOTS_DIR = "image\plots"
+TIMESERIES_DIR = "image\\timeseries"
+BAR_CHARTS_DIR = "image\\barcharts"
 
 
 emp_data_path = "data/cleand/3 産業別、売上高経常利益率別常時従業者数"
