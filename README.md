@@ -9,7 +9,16 @@
 - Shuma Suzuki
 
 ### Responsibilities
+
 Joseph Chen: Data scraping/cleaning, DVC
+
+Kohsuke Sagara: 
+
+Rin Nitta: 
+
+Shuma Suzuki: 
+
+Yoshiya Bito: 
 
 ## (2) Our Interests
 
@@ -91,16 +100,11 @@ This item is planned to be updated.
 
 `notebooks\assignment_group\HW2\Milestone_2.ipynb`
 
+### Plots
 
+`\plots`
 
-This item is planned to be updated.
-
-There are 3 plots
-Plot Preview (to be updated)
-![1748228982837](image/README/1748228982837.png)
-
-![1748228870896](image/README/1748228870896.png)
-![image](https://github.com/user-attachments/assets/defa6edd-2b1e-455c-a813-1757f478e5c9)
+There are three kind of plots(Scatter Plots, Time seires, Histogram)
 
 ### Our Special Challenge
 
