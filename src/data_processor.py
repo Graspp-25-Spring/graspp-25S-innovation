@@ -469,23 +469,23 @@ class PanelDataProducer:
         panel_data_list = []
         rows = []
         for year, df_research in research_dict.items():
-            randd_df = research_dict[year]
+            r_and_d_df = research_dict[year]
             patent_df = patent_dict.get(year)
             if patent_df is None:
                 continue
             
             # Standardize column names for merging
-            randd_df = randd_df.rename(columns={
-                "産業": "industry",
-                "研究開発_研究開発費_計": "randd_total",
-                "研究開発_研究開発費_計_百万円": "randd_total",
-                "研究開発_売上高（百万円）": "randd_sales",
-                "研究開発_売上高_百万円": "randd_sales",
+            r_and_d_df = r_and_d_df.rename(columns={
+                "産業": "industry_name",
+                "研究開発_研究開発費_計": "r_and_d_total",
+                "研究開発_研究開発費_計_百万円": "r_and_d_total",
+                "研究開発_売上高（百万円）": "r_and_d_sales",
+                "研究開発_売上高_百万円": "r_and_d_sales",
                 "企業数": "company_count",
                 "研究開発_企業数": "company_count"
             })
             patent_df = patent_df.rename(columns={
-                "産業": "industry",
+                "産業": "industry_name",
                 "特許権_企業数": "patent_company_count",
                 "特許権_企業数_社": "patent_company_count",
                 "_特許権_企業数": "patent_company_count",
@@ -503,22 +503,22 @@ class PanelDataProducer:
             })
 
             # Merge on industry name
-            merged = pd.merge(randd_df, patent_df, on="industry", how="inner")
+            merged = pd.merge(r_and_d_df, patent_df, on="industry_name", how="inner")
 
             #if not merged:
              #   print("エラー: マージできるデータがありませんでした。")
               #  return None, None, None, None
 
             for _, row in merged.iterrows():
-                industry_id = get_industries_id(row["industry"])
+                industry_id = get_industries_id(row["industry_name"])
                 industry_name = get_industries_name(industry_id)
                 rows.append({
                     "year": year,
-                    "industry": industry_name,
+                    "industry_name": industry_name,
                     "industry_id": industry_id,
                     "企業数": row.get("company_count"),
-                    "研究開発_売上高_百万円": row.get("randd_sales"),
-                    "研究開発_研究開発費_計": row.get("randd_total"),
+                    "研究開発_売上高_百万円": row.get("r_and_d_sales"),
+                    "研究開発_研究開発費_計": row.get("r_and_d_total"),
                     "特許権_企業数": row.get("patent_company_count"),
                     "特許権_件数_所有数": row.get("patent_count"),
                     "実用新案権_企業数": row.get("utility_company_count"),
@@ -528,7 +528,7 @@ class PanelDataProducer:
                 })
         
         panel_data = pd.DataFrame(rows, columns=[
-                "year", "industry", "industry_id", "企業数", "研究開発_売上高_百万円",
+                "year", "industry_name", "industry_id", "企業数", "研究開発_売上高_百万円",
                 "研究開発_研究開発費_計", "特許権_企業数", "特許権_件数_所有数", "実用新案権_企業数",
                 "実用新案権_件数_所有数", "意匠権_企業数", "意匠権_件数_所有数"
             ])
@@ -541,8 +541,8 @@ class PanelDataProducer:
         panel_data.to_csv(save_path, index=False)
         
         panel_data.columns = [
-            "year", "industry", "industry_id", "company_count", "randd_sales",
-            "randd_total", "patent_company_count", "patent_count",
+            "year", "industry_name", "industry_id", "company_count", "r_and_d_sales",
+            "r_and_d_total", "patent_company_count", "patent_count",
             "utility_company_count", "utility_count", "design_company_count",
             "design_count"
         ]
