@@ -10,13 +10,13 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 #folds path
 #data path
-DOWNLOAD_DIR = "data\\raw"
-CLEAND_DIR = "data\cleand"
-PANELDATA_DIR = "data\paneldata"
+DOWNLOAD_DIR = "data/raw"
+CLEAND_DIR = "data/cleand"
+PANELDATA_DIR = "data/paneldata"
 
-PLOTS_DIR = "image\plots"
-TIMESERIES_DIR = "image\\timeseries"
-BAR_CHARTS_DIR = "image\\barcharts"
+PLOTS_DIR = "image/plots"
+TIMESERIES_DIR = "image/timeseries"
+BAR_CHARTS_DIR = "image/barcharts"
 
 
 emp_data_path = "data/cleand/3 産業別、売上高経常利益率別常時従業者数"
@@ -28,7 +28,7 @@ RESEARCH_EXPENSE_FILE_KEY = "第10表 産業別、企業数、売上高、研究
 PATENT_COUNT_FILE_KEY = "第11表 産業別、企業数、特許権、実用新案権、意匠権別の所有件数及び使用件数"
 
 #outputs files
-output_path = "reports"
+OUTPUT_PATH = "reports"
 
 # YEARS　TO　SCRAPE
 YEARS_TO_SCRAPE = list(range(2023, 2009, -1))
