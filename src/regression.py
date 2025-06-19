@@ -2,10 +2,12 @@ import pandas as pd
 import numpy as np
 from linearmodels import PanelOLS
 import warnings
+import os
+import settings
 warnings.filterwarnings('ignore')
 
 # Data loading
-df = pd.read_csv('/Users/kohsukesagara/Desktop/graspp-25S-innovation/notebooks/assignment_group/Milestone2/panel_data.csv')
+df = pd.read_csv(os.path.join(settings.PANELDATA_DIR, 'panel_data.csv'))
 
 print("=" * 80)
 print("パネルデータ固定効果モデル分析")
