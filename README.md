@@ -120,7 +120,7 @@ So, why is it insignificant?
 * Perform quantile regression on patent levels.
 * Arbitrarily categorize industries.
 
-### (8) The file path
+## (8) The file path
 
 ### Milestone 1
 
