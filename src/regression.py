@@ -30,8 +30,8 @@ with open(output_text_path, 'w', encoding='utf-8') as f:
     writer("\n=== データ前処理 ===")
 
     # 必要な列を選択
-    analysis_df = df[['year', 'industry', 'industry_id', 'company_count', 
-                      'randd_sales', 'randd_total', 'patent_count', 
+    analysis_df = df[['year', 'industry_name', 'industry_id', 'company_count', 
+                      'r_and_d_sales', 'r_and_d_total', 'patent_count', 
                       'utility_count', 'design_count']].copy()
 
     writer(f"初期データ数: {len(analysis_df)}")
@@ -47,7 +47,7 @@ with open(output_text_path, 'w', encoding='utf-8') as f:
     writer(f"欠損値除去後: {len(analysis_df)}")
 
     # 数値型に変換
-    numeric_columns = ['company_count', 'randd_sales', 'randd_total', 'patent_count', 
+    numeric_columns = ['company_count', 'r_and_d_sales', 'r_and_d_total', 'patent_count', 
                        'utility_count', 'design_count']
     for col in numeric_columns:
         analysis_df[col] = pd.to_numeric(analysis_df[col], errors='coerce')
@@ -57,8 +57,8 @@ with open(output_text_path, 'w', encoding='utf-8') as f:
     writer(f"数値変換後: {len(analysis_df)}")
 
     # ゼロ値や負値の処理
-    analysis_df = analysis_df[analysis_df['randd_sales'] > 0]
-    analysis_df = analysis_df[analysis_df['randd_total'] >= 0]
+    analysis_df = analysis_df[analysis_df['r_and_d_sales'] > 0]
+    analysis_df = analysis_df[analysis_df['r_and_d_total'] >= 0]
     analysis_df = analysis_df[analysis_df['patent_count'] >= 0]
 
     writer(f"前処理完了後のデータ数: {len(analysis_df)}")
@@ -111,11 +111,11 @@ with open(output_text_path, 'w', encoding='utf-8') as f:
         group['patent_diff'] = group['patent_count'].diff()
         
         # 売上高による正規化
-        group['patent_intensity'] = group['patent_diff'] / group['randd_sales']
-        group['rd_intensity'] = group['randd_total'] / group['randd_sales']
-        group['company_count_norm'] = group['company_count'] / group['randd_sales']
-        group['utility_intensity'] = group['utility_count'] / group['randd_sales']
-        group['design_intensity'] = group['design_count'] / group['randd_sales']
+        group['patent_intensity'] = group['patent_diff'] / group['r_and_d_sales']
+        group['rd_intensity'] = group['r_and_d_total'] / group['r_and_d_sales']
+        group['company_count_norm'] = group['company_count'] / group['r_and_d_sales']
+        group['utility_intensity'] = group['utility_count'] / group['r_and_d_sales']
+        group['design_intensity'] = group['design_count'] / group['r_and_d_sales']
         
         # ラグ変数作成
         group['rd_intensity_lag1'] = group['rd_intensity'].shift(1)
