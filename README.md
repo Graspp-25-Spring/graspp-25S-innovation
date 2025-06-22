@@ -10,15 +10,15 @@
 
 ### Responsibilities
 
-Joseph Chen: Data scraping/cleaning, DVC
+Joseph Chen: Data scraping/cleaning, DVC and Scraping Documents（議事録）
 
-Kohsuke Sagara: 
+Kohsuke Sagara: Model Structuring and Regression
 
-Rin Nitta: 
+Rin Nitta: Model Structuring and Interpritation
 
-Shuma Suzuki: 
+Shuma Suzuki: Visualization -Sctter Plots and Bar charts-
 
-Yoshiya Bito: 
+Yoshiya Bito: Visualization -Time Series-, Refactoring Mian.py
 
 ## (2) Our Interests
 
@@ -34,6 +34,10 @@ On the other hand, a key challenge lies in measuring the extent to which innovat
 The analysis aims to investigate the relationship between research and development investment and the number of patents filed in different industrial sectors in Japan.
 
 ## (4) Previous Research
+
+Chung-Chu Chuang & Chung-Min Tsai & Hsiao-Chen Chang & Yi-Hsien Wang, 2021. "Applying Quantile Regression to Assess the Relationship between R&D, Technology Import and Patent Performance in Taiwan," JRFM, MDPI, vol. 14(8), pages 1-14, August.
+
+This paper supports the conclusion that R&D investment promotion policies are most effective when targeted at specific industries.
 
 ## (5) Hypothesis
 
@@ -68,6 +72,18 @@ There is a positive correlation between the amount of R&D spending and the numbe
 - $empl_{i, year}$ : Number of employees inindustry $i$ in year $year$
 - $e_{i, year}$ : Error term
 
+### Barcharts
+
+this will be updated
+
+### Scatter Plots
+
+this will be updated
+
+### Time Series
+
+this will be updated
+
 ## (7) Regression Models
 
 ### Simple Regression Model
@@ -82,15 +98,29 @@ $$
 patent_{i, year} = const + RDexp_{i, year} + empl_{i, year} + e_{i, year}
 $$
 
-## (8) Regression Analysis
+### Regression Analysis
 
-This item is planned to be updated.
+#### It is not statistically significant
 
-## (9) Conclusion
+So, why is it insignificant?
 
-This item is planned to be updated.
+##### 1. Is a lag of up to two periods insufficient?
 
-## (10) The file path
+* According to Chuang et al. (2021), the effect is significantly positive for lags of up to two years (specifically for firms in the high quantile of patent performance).
+  →This suggests that merely extending the lag period may not resolve the issue.
+
+##### 2. A more likely reason is the substantial heterogeneity across industries.
+
+* Chuang et al. (2021) found that the impact of R&D varies across quantiles, being negative for low-quantile firms but positive for mid-to-high-quantile firms.
+* To address this, we can analyze the heterogeneity directly by introducing an interaction term between industry characteristics and R&D spending.
+  →In their study, Chuang et al. (2021) classified firms into six categories based on "industry characteristics" and demonstrated that the interaction term between these characteristics and R&D expenditure was significantly positive.
+
+#### Future Directions
+
+* Perform quantile regression on patent levels.
+* Arbitrarily categorize industries.
+
+### (8) The file path
 
 ### Milestone 1
 
@@ -99,12 +129,6 @@ This item is planned to be updated.
 ### Milestone 2
 
 `notebooks\assignment_group\HW2\Milestone_2.ipynb`
-
-### Plots
-
-`\plots`
-
-There are three kind of plots(Scatter Plots, Time seires, Histogram)
 
 ### Our Special Challenge
 

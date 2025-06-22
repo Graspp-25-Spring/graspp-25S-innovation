@@ -20,6 +20,17 @@ class Plotsproducer:
         bar_chart_data = panel_data.copy()
 
         bar_chart_data = bar_chart_data[bar_chart_data["year"].isin(years) & bar_chart_data['industry_id'].isin(industry_id_list)]
+        
+        # r_and_d_total と r_and_d_sales カラムを数値型に変換
+        # errors='coerce' を指定することで、変換できない値は NaN になる
+        bar_chart_data["r_and_d_total"] = pd.to_numeric(bar_chart_data["r_and_d_total"], errors='coerce')
+        bar_chart_data["r_and_d_sales"] = pd.to_numeric(bar_chart_data["r_and_d_sales"], errors='coerce')
+
+        # NaN 値（数値変換できなかったものや元々欠損だったもの）を含む行を除外
+        bar_chart_data = bar_chart_data.dropna(subset=["r_and_d_total", "r_and_d_sales"])
+
+        # ゼロ除算を避けるために r_and_d_sales が 0 ではない行のみを保持
+        bar_chart_data = bar_chart_data[bar_chart_data["r_and_d_sales"] != 0]
 
         years = [2010,2015,2020]
 
@@ -187,6 +198,7 @@ class Plotsproducer:
 
     def make_each_scatter_plots(panel_data: pd.DataFrame, target_index: pd.Series, save_dir: str, file_name: str):
         print(f"✓ {file_name}を作成します")
+        
 
         plt.figure(figsize=(10, 6))
         ax = sns.scatterplot(data=panel_data[target_index], x="r_and_d_total", y="patent_count", hue="industry_name", palette="bright", style="industry_name")
