@@ -64,8 +64,8 @@ where α_i = 産業固定効果
 Dep. Variable:       patent_intensity   R-squared:                        0.0043
 Estimator:                   PanelOLS   R-squared (Between):              0.2808
 No. Observations:                1435   R-squared (Within):               0.0043
-Date:                Fri, Jun 20 2025   R-squared (Overall):              0.0155
-Time:                        02:17:48   Log-likelihood                    1455.2
+Date:                Mon, Jun 23 2025   R-squared (Overall):              0.0155
+Time:                        20:42:17   Log-likelihood                    1455.2
 Cov. Estimator:             Clustered                                           
                                         F-statistic:                      6.0686
 Entities:                          21   P-value                           0.0139
@@ -119,8 +119,8 @@ Between R²: 0.2808
 Dep. Variable:       patent_intensity   R-squared:                        0.0117
 Estimator:                   PanelOLS   R-squared (Between):              0.3032
 No. Observations:                1414   R-squared (Within):               0.0117
-Date:                Fri, Jun 20 2025   R-squared (Overall):              0.0323
-Time:                        02:17:48   Log-likelihood                    1429.0
+Date:                Mon, Jun 23 2025   R-squared (Overall):              0.0323
+Time:                        20:42:17   Log-likelihood                    1429.0
 Cov. Estimator:             Clustered                                           
                                         F-statistic:                      8.2037
 Entities:                          21   P-value                           0.0003
@@ -179,14 +179,14 @@ Within R²: 0.0117
 
 【主要変数の記述統計】
        patent_intensity  rd_intensity_lag1  rd_intensity_lag2
-count       1435.000000        1435.000000        1414.000000
+count            1435.0             1435.0             1414.0
 mean          -0.014064           0.032251           0.032406
 std            0.089026           0.059461           0.059805
 min           -1.550503           0.000108           0.000108
 25%           -0.004642           0.007138           0.007221
 50%           -0.000049           0.017233           0.017287
 75%            0.002434           0.043112           0.043273
-max            0.022970           1.243076           1.243076
+max             0.02297           1.243076           1.243076
 
 【産業大分類別データ分布】
 産業ID : データ数

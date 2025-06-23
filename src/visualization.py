@@ -199,10 +199,23 @@ class Plotsproducer:
     def make_each_scatter_plots(panel_data: pd.DataFrame, target_index: pd.Series, save_dir: str, file_name: str):
         print(f"✓ {file_name}を作成します")
         
+        # Patch: Clean data before plotting
+        df = panel_data[target_index].copy()
+        df = df.dropna(subset=["industry_name", "r_and_d_total", "patent_count"])
+        df["industry_name"] = df["industry_name"].astype(str)
+        int_columns = [
+            "company_count", "r_and_d_sales", "r_and_d_total",
+            "patent_company_count", "patent_count",
+            "utility_company_count", "utility_count",
+            "design_company_count", "design_count"
+        ]
+        for col in int_columns:
+            if col in df.columns:
+                df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0).astype(int)
 
         plt.figure(figsize=(10, 6))
-        ax = sns.scatterplot(data=panel_data[target_index], x="r_and_d_total", y="patent_count", hue="industry_name", palette="bright", style="industry_name")
-        ax = sns.regplot(data=panel_data[target_index], x='r_and_d_total', y='patent_count', ax=ax, scatter=False, line_kws={'color': 'black', 'linewidth': 1})
+        ax = sns.scatterplot(data=df, x="r_and_d_total", y="patent_count", hue="industry_name", palette="bright", style="industry_name")
+        ax = sns.regplot(data=df, x='r_and_d_total', y='patent_count', ax=ax, scatter=False, line_kws={'color': 'black', 'linewidth': 1})
         formatter = ScalarFormatter(useMathText=True)
         formatter.set_powerlimits((4, 4))
         ax.xaxis.set_major_formatter(formatter)
