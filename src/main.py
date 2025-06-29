@@ -18,17 +18,6 @@ def main():
     cleaner = data_processor.DataCleaner(settings.DOWNLOAD_DIR, settings.CLEAND_DIR)
     cleaner.clean_all_data()
     print("Data cleaning complete.")
-    # cleaner.output_visualization(year=2020)
-    
-    # Generate visualizations
-    #print("\nGenerating data plots...")
-    #visualization.output_visualization(
-    #    cleaner.ResearchExpenseDict,
-    #    cleaner.PatentCountDict,
-    #    year=2020
-    #)
-    
-    # print("Generating data plots complete.")
     
     # create panale data
     panel_df, research_dict, patent_dict, labor_dict = data_processor.PanelDataProducer.create_panel_data()
