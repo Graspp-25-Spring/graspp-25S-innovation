@@ -74,15 +74,15 @@ There is a positive correlation between the amount of R&D spending and the numbe
 
 ### Barcharts
 
-this will be updated
+`image/barcharts`
 
 ### Scatter Plots
 
-this will be updated
+`image/plots`
 
 ### Time Series
 
-this will be updated
+`image/timeseries`
 
 ## (7) Regression Models
 

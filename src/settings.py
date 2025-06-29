@@ -1,6 +1,8 @@
 # Set the object required to execute main.py.
 import os
 
+WORDFLAG = "E" # E in English, J in Japanese 
+
 # Windows: 'C:/Windows/Fonts/YuGothM.ttc'
 # Ubuntu: '/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc'
 FONT_PATH = '/Library/Fonts/Arial Unicode.ttf'
@@ -13,6 +15,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DOWNLOAD_DIR = "data/raw"
 CLEAND_DIR = "data/cleand"
 PANELDATA_DIR = "data/paneldata"
+DATA_DIR = "data"
 
 PLOTS_DIR = "image/plots"
 TIMESERIES_DIR = "image/timeseries"

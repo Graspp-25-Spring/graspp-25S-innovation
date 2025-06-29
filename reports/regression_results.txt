@@ -64,8 +64,8 @@ where α_i = 産業固定効果
 Dep. Variable:       patent_intensity   R-squared:                        0.0043
 Estimator:                   PanelOLS   R-squared (Between):              0.2808
 No. Observations:                1435   R-squared (Within):               0.0043
-Date:                Mon, Jun 23 2025   R-squared (Overall):              0.0155
-Time:                        20:42:17   Log-likelihood                    1455.2
+Date:                Sun, Jun 29 2025   R-squared (Overall):              0.0155
+Time:                        23:12:35   Log-likelihood                    1455.2
 Cov. Estimator:             Clustered                                           
                                         F-statistic:                      6.0686
 Entities:                          21   P-value                           0.0139
@@ -119,8 +119,8 @@ Between R²: 0.2808
 Dep. Variable:       patent_intensity   R-squared:                        0.0117
 Estimator:                   PanelOLS   R-squared (Between):              0.3032
 No. Observations:                1414   R-squared (Within):               0.0117
-Date:                Mon, Jun 23 2025   R-squared (Overall):              0.0323
-Time:                        20:42:17   Log-likelihood                    1429.0
+Date:                Sun, Jun 29 2025   R-squared (Overall):              0.0323
+Time:                        23:12:35   Log-likelihood                    1429.0
 Cov. Estimator:             Clustered                                           
                                         F-statistic:                      8.2037
 Entities:                          21   P-value                           0.0003

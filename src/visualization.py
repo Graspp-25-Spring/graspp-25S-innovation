@@ -4,17 +4,17 @@ import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
-import japanize_matplotlib
-import sys
 
 from matplotlib.font_manager import FontProperties
 from matplotlib.ticker import ScalarFormatter, PercentFormatter
 from industries import get_industries_id, get_industries_name
 import settings
 import data_processor
+import japanize_matplotlib
 
 class Plotsproducer:
-    def make_each_bar_chart(panel_data:pd.DataFrame, target_column:str, years:list, industry_id_list:list, save_dir: str, ax, file_name: str):
+    def make_each_bar_chart(panel_data:pd.DataFrame, target_column:str, years:list, industry_id_list:list, save_dir: str, ax,
+                            ylabel:str, file_name: str, title_name: str):
         print(f"✓ {file_name}を作成します")
 
         bar_chart_data = panel_data.copy()
@@ -46,9 +46,9 @@ class Plotsproducer:
 
         bar_chart_pivot_df.plot(kind="bar", ax=ax, figsize=(20, 10))
 
-        ax.set_title(f"{file_name}")
-        ax.set_xlabel("産業")
-        ax.set_ylabel(f"{target_column}")
+        ax.set_title(f"{title_name}")
+        ax.set_xlabel("Industries")
+        ax.set_ylabel(f"{ylabel}")
         # ax.legend(title='year', bbox_to_anchor=(1.05, 1), loc='upper left')
         ax.set_xticklabels(ax.get_xticklabels(), rotation=0)
 
@@ -153,13 +153,16 @@ class Plotsproducer:
         fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(18, 6))
 
         Plotsproducer.make_each_bar_chart(panel_data, target_column="r_and_d_total", years=years,
-                                          industry_id_list=large_industry_id_list, save_dir=save_dir, ax=axes[0], file_name="1_R&D")
+                                          industry_id_list=large_industry_id_list, save_dir=save_dir, ax=axes[0], ylabel = "R&D expenditure",
+                                          file_name="1_R&D",  title_name="Three years' worth of R&D expenditure")
 
         Plotsproducer.make_each_bar_chart(panel_data, target_column="patent_count", years=years,
-                                          industry_id_list=large_industry_id_list, save_dir=save_dir, ax=axes[1], file_name="2_Patent_Count")
+                                          industry_id_list=large_industry_id_list, save_dir=save_dir, ax=axes[1], ylabel = "The Number of Patents",
+                                          file_name="2_Patent_Count", title_name="Three years' worth of The Number of Patents")
 
         Plotsproducer.make_each_bar_chart(panel_data, target_column="r_and_d_total/r_and_d_sales", years=years,
-                                          industry_id_list=large_industry_id_list, save_dir=save_dir, ax=axes[2], file_name="3_R&D_per_Sales")
+                                          industry_id_list=large_industry_id_list, save_dir=save_dir, ax=axes[2], ylabel = "R&D Expenditure / Sales",
+                                          file_name="3_R&D_per_Sales", title_name = "Three years' worth of R&D Expenditure / Sales")
 
         plt.tight_layout()
 
@@ -175,7 +178,7 @@ class Plotsproducer:
         yearly_patent = panel_data.groupby("year")["patent_count"].sum()
         yearly_patent.plot(marker='o')
         plt.xlabel("Year")
-        plt.ylabel("patent_count_total")
+        plt.ylabel("Patent count total")
         plt.yscale('log')
         plt.title("Annual trend of total patent count")
         plt.grid(True)
@@ -187,8 +190,8 @@ class Plotsproducer:
         yearly_patent_change = yearly_patent.pct_change(1).multiply(100)
         yearly_patent_change.plot(marker='o')
         plt.xlabel("Year")
-        plt.ylabel("patent_count_total_pct_change")
-        plt.title("Year-over-year percent change in total patent count")
+        plt.ylabel("Patent count total pct change  (%)")
+        plt.title("Year-Over-Year percent change in total patent count")
         plt.grid(True)
         save_path = os.path.join(save_dir, 'Year-over-year_percent_change_in_total_patent_count.png')
         plt.savefig(save_path)
@@ -196,7 +199,7 @@ class Plotsproducer:
         print(f"✓ Time Seriesを保存しました: {save_path}")
 
 
-    def make_each_scatter_plots(panel_data: pd.DataFrame, target_index: pd.Series, save_dir: str, file_name: str):
+    def make_each_scatter_plots(panel_data: pd.DataFrame, target_index: pd.Series, save_dir: str, file_name: str, title_name: str):
         print(f"✓ {file_name}を作成します")
         
         # Patch: Clean data before plotting
@@ -214,16 +217,24 @@ class Plotsproducer:
                 df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0).astype(int)
 
         plt.figure(figsize=(10, 6))
-        ax = sns.scatterplot(data=df, x="r_and_d_total", y="patent_count", hue="industry_name", palette="bright", style="industry_name")
-        ax = sns.regplot(data=df, x='r_and_d_total', y='patent_count', ax=ax, scatter=False, line_kws={'color': 'black', 'linewidth': 1})
-        formatter = ScalarFormatter(useMathText=True)
-        formatter.set_powerlimits((4, 4))
-        ax.xaxis.set_major_formatter(formatter)
-        ax.yaxis.set_major_formatter(formatter)
+        
+        plot_df = df[(df["r_and_d_total"] > 0) & (df["patent_count"] > 0)].copy()
+        if plot_df.empty:
+            print(f"警告: {file_name}にはプロット可能なデータがありません。スキップします。")
+            return
+
+        plot_df["log_r_and_d_total"] = np.log10(plot_df["r_and_d_total"])
+        plot_df["log_patent_count"] = np.log10(plot_df["patent_count"])
+
+        plt.figure(figsize=(10, 6))
+    
+        ax = sns.scatterplot(data=plot_df, x="log_r_and_d_total", y="log_patent_count", hue="industry_name", palette="bright", style="industry_name")
+        ax = sns.regplot(data=plot_df, x='log_r_and_d_total', y='log_patent_count', ax=ax, scatter=False, line_kws={'color': 'black', 'linewidth': 1})
+
         plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
-        plt.xlabel("R&D費用(研究開発_研究開発費_計)")
-        plt.ylabel("特許件数(特許権_件数_所有数)")
-        plt.title(f"{file_name}")
+        plt.xlabel("R&D Expenditure (log10 scale)")
+        plt.ylabel("Number of patents held by the firms (log10 scale)")
+        plt.title(f"{title_name}")
         plt.tight_layout()
         plt.grid(True)
 
@@ -238,29 +249,34 @@ class Plotsproducer:
         print("Produce Scatter Plots")
 
         file_name = "1_R&D_vs_Patents_Major_Industry"
+        title_name = "R&D expense vs Patents in Major_Industry"
         target_index = panel_data["industry_id"].apply(len).isin([1,2])
-        Plotsproducer.make_each_scatter_plots(panel_data, target_index, save_dir, file_name)
+        Plotsproducer.make_each_scatter_plots(panel_data, target_index, save_dir, file_name, title_name)
 
         file_name = "2_R&D_vs_Patents_Major_Industry_Excl_Manufacturing"
+        title_name = "R&D expense vs Patents in Major Industry Excl Manufacturing"
         target_index = panel_data["industry_id"].apply(len).isin([1,2]) & ~panel_data["industry_id"].isin(["E"])
-        Plotsproducer.make_each_scatter_plots(panel_data, target_index, save_dir, file_name)
+        Plotsproducer.make_each_scatter_plots(panel_data, target_index, save_dir, file_name, title_name)
 
         file_name = "3_R&D_vs_Patents_Manufacturing_Detail"
+        title_name = "R&D expense vs Patents in Manufacturing Detail"
         manufacturing_industry_cd_list = ["090","091","092","093","099","100","101","102","110","111","112","113","114","115","119","120","121","129","130","140","141","142","150","160","161","162","163","164","169","170","171","179","180","190","191","199","200","210","211","212","219","220","221","222","230","231","232","240","241","249","250","251","252","253","259","260","261","262","270","271","273","274","275","276","280","290","291","292","293","299","300","301","302","310","311","319","320"]
         #If the last digit of industry_id is 0, it represents a medium classification; otherwise, it represents a small classification.
         medium_class_manufacturing_industry_cd_list = [i for i in manufacturing_industry_cd_list if int(i) % 10 == 0]
         target_index = panel_data["industry_id"].isin(medium_class_manufacturing_industry_cd_list)
-        Plotsproducer.make_each_scatter_plots(panel_data, target_index, save_dir, file_name)
+        Plotsproducer.make_each_scatter_plots(panel_data, target_index, save_dir, file_name, title_name)
 
         file_name = "4_R&D_vs_Patents_Wholesale_Detail"
+        title_name = "R&D expense vs Patents in Wholesale Detail"
         wholesale_industry_cd_list = ["511","512","521","522","531","532","533","534","535","536","541","542","543","549","551","552","553","559"]
         target_index = panel_data["industry_id"].isin(wholesale_industry_cd_list)
-        Plotsproducer.make_each_scatter_plots(panel_data, target_index, save_dir, file_name)
+        Plotsproducer.make_each_scatter_plots(panel_data, target_index, save_dir, file_name, title_name)
 
         file_name = "5_R&D_vs_Patents_Research_Professional_Technical_Detail"
+        title_name = "R&D expense vs Patents in Research Professional Technical Detail"
         academic_related_industry_cd_list = ["710","726","728","730","743","744","745","746"]
         target_index = panel_data["industry_id"].isin(academic_related_industry_cd_list)
-        Plotsproducer.make_each_scatter_plots(panel_data, target_index, save_dir, file_name)
+        Plotsproducer.make_each_scatter_plots(panel_data, target_index, save_dir, file_name, title_name)
         print("End producing Scatter Plots")
 
 ### 実行関数 ###
