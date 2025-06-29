@@ -249,7 +249,7 @@ class Plotsproducer:
         print("Produce Scatter Plots")
 
         file_name = "1_R&D_vs_Patents_Major_Industry"
-        title_name = "R&D expense vs Patents in Major_Industry"
+        title_name = "R&D expense vs Patents in Major Industry"
         target_index = panel_data["industry_id"].apply(len).isin([1,2])
         Plotsproducer.make_each_scatter_plots(panel_data, target_index, save_dir, file_name, title_name)
 
