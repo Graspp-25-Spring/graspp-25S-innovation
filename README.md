@@ -91,25 +91,15 @@ The analysis employs several data transformation techniques to ensure robust pan
 
 - **Patent per Sales**:
 
-  $$
-  \frac{\Delta Patent_{i,t}}{Sales_{i,t}}
-  $$
+  $$\frac{\Delta Patent_{i,t}}{Sales_{i,t}}$$
 
   - Annual patent generation relative to industry sales volume
 - **R&D per Sales**:
 
-  $$
-  \frac{RD_{i,t-k}}{Sales_{i,t-k}}
-  $$
+  $$\frac{RD_{i,t-k}}{Sales_{i,t-k}}$$
 
   - R&D investment as a proportion of sales revenue (lagged by k periods)
-- **Company Density**:
 
-  $$
-  \frac{Companies_{i,t}}{Sales_{i,t}}
-  $$
-
-  - Number of companies relative to total industry sales
 
 ### **Barcharts**
 
