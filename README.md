@@ -199,10 +199,3 @@ Based on the current analysis framework, potential extensions include:
 `\data\README.md`
 
 We challenged to use DVC (Data Version Control) for reproducible data management and version control of our analysis pipeline.
-
-
-### **Our Special Challenge**
-
-`\data\README.md`
-
-We challenged to use DVC (Data Version Control) for reproducible data management and version control of our analysis pipeline.
