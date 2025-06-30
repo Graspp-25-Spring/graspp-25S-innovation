@@ -7,12 +7,25 @@ import matplotlib.pyplot as plt
 
 from matplotlib.font_manager import FontProperties
 from matplotlib.ticker import ScalarFormatter, PercentFormatter
-from industries import get_industries_id, get_industries_name
+from industries import get_industries_id, get_industries_name, industryjptoen_dict
 import settings
 import data_processor
 import japanize_matplotlib
 
 class Plotsproducer:
+    @staticmethod
+    def translate_industry_name_to_english(japanese_name):
+        """Translate Japanese industry name to English using the dictionary"""
+        return industryjptoen_dict.get(japanese_name, japanese_name)
+    
+    @staticmethod
+    def translate_dataframe_industry_names(df):
+        """Translate industry names in a dataframe from Japanese to English"""
+        if 'industry_name' in df.columns:
+            df = df.copy()
+            df['industry_name'] = df['industry_name'].apply(Plotsproducer.translate_industry_name_to_english)
+        return df
+
     def make_each_bar_chart(panel_data:pd.DataFrame, target_column:str, years:list, industry_id_list:list, save_dir: str, ax,
                             ylabel:str, file_name: str, title_name: str):
         print(f"✓ {file_name}を作成します")
@@ -36,6 +49,9 @@ class Plotsproducer:
 
         if target_column == "r_and_d_total/r_and_d_sales":
             bar_chart_data["r_and_d_total/r_and_d_sales"] = bar_chart_data["r_and_d_total"]/bar_chart_data["r_and_d_sales"]
+
+        # Translate industry names to English
+        bar_chart_data = Plotsproducer.translate_dataframe_industry_names(bar_chart_data)
 
         bar_chart_pivot_df = bar_chart_data.pivot_table(
             index="industry_name",
@@ -206,6 +222,10 @@ class Plotsproducer:
         df = panel_data[target_index].copy()
         df = df.dropna(subset=["industry_name", "r_and_d_total", "patent_count"])
         df["industry_name"] = df["industry_name"].astype(str)
+        
+        # Translate industry names to English
+        df = Plotsproducer.translate_dataframe_industry_names(df)
+        
         int_columns = [
             "company_count", "r_and_d_sales", "r_and_d_total",
             "patent_company_count", "patent_count",
