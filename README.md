@@ -64,15 +64,30 @@ There is a positive correlation between the amount of R&D spending and the numbe
 
 ### **Variables**
 
-- $$year$$ : year 2010 ~ 2021
-- $$i$$ : Industry major category $$i$$
-- $$t$$ : Time period $$t$$
-- $$\Delta Patent_{i,t}$$ : Annual change in patent count for industry $$i$$ in year $$t$$
-- $$Sales_{i,t}$$ : Total sales revenue for industry $$i$$ in year $$t$$
-- $$RD_{i,t}$$ : Total R&D expenditure for industry $$i$$ in year $$t$$
-- $$Companies_{i,t}$$ : Number of companies in industry $$i$$ in year $$t$$
-- $$\alpha_i$$ : Industry fixed effects
-- $$\varepsilon_{i,t}$$ : Error term
+- $$
+  year$$ : year
+  $$
+- $$
+  i$$ : Industry category $$i
+  $$
+- $$
+  t$$ : Time period (2010 ~ 2021)$$t
+  $$
+- $$
+  \Delta Patent_{i,t}$$ : Annual change in patent count for industry $$i$$ in year $$t
+  $$
+- $$
+  Sales_{i,t}$$ : Total sales revenue for industry $$i$$ in year $$t
+  $$
+- $$
+  RD_{i,t}$$ : Total R&D expenditure for industry $$i$$ in year $$t
+  $$
+- $$
+  \alpha_i$$ : Industry fixed effects
+  $$
+- $$
+  \varepsilon_{i,t}$$ : Error term
+  $$
 
 ### **Data Processing and Normalization**
 
@@ -90,9 +105,27 @@ The analysis employs several data transformation techniques to ensure robust pan
 
 ### **Key Transformed Variables**
 
-- **Patent per Sales**: $$\frac{\Delta Patent_{i,t}}{Sales_{i,t}}$$ - Annual patent generation relative to industry sales volume
-- **R&D per Sales**: $$\frac{RD_{i,t-k}}{Sales_{i,t-k}}$$ - R&D investment as a proportion of sales revenue (lagged by k periods)
-- **Company Density**: $$\frac{Companies_{i,t}}{Sales_{i,t}}$$ - Number of companies relative to total industry sales
+- **Patent per Sales**:
+
+  $$
+  \frac{\Delta Patent_{i,t}}{Sales_{i,t}}
+  $$
+
+  - Annual patent generation relative to industry sales volume
+- **R&D per Sales**:
+
+  $$
+  \frac{RD_{i,t-k}}{Sales_{i,t-k}}
+  $$
+
+  - R&D investment as a proportion of sales revenue (lagged by k periods)
+- **Company Density**:
+
+  $$
+  \frac{Companies_{i,t}}{Sales_{i,t}}
+  $$
+
+  - Number of companies relative to total industry sales
 
 ### **Barcharts**
 
@@ -110,21 +143,49 @@ The analysis employs several data transformation techniques to ensure robust pan
 
 ### **Model ① : One-Period Lag Fixed Effects Panel Model**
 
+$$
+\frac{\Delta Patent_{i,t}}{Sales_{i,t}} = \alpha_i + \beta_1 \cdot \frac{RD_{i,t-1}}{Sales_{i,t-1}} + \varepsilon_{i,t}
+$$
 
-$$\frac{\Delta Patent_{i,t}}{Sales_{i,t}} = \alpha_i + \beta_1 \cdot \frac{RD_{i,t-1}}{Sales_{i,t-1}} + \varepsilon_{i,t}$$
+**Economic Interpretation**: This model examines whether industries that invest a higher proportion of their sales in R&D (in the previous year) generate more patents per unit of sales in the current year. The coefficient
 
-**Economic Interpretation**: This model examines whether industries that invest a higher proportion of their sales in R&D (in the previous year) generate more patents per unit of sales in the current year. The coefficient $$\beta_1$$ represents the change in patent generation per sales unit when the R&D-to-sales ratio increases by one unit.
+$$
+\beta_1
+$$
 
-**Fixed Effects ($$\alpha_i$$)**: Controls for time-invariant industry characteristics such as technological opportunities, regulatory environment, and industry-specific innovation patterns.
+ represents the change in patent generation per sales unit when the R&D-to-sales ratio increases by one unit.
+
+**Fixed Effects (**
+
+**)**: Controls for time-invariant industry characteristics such as technological opportunities, regulatory environment, and industry-specific innovation patterns.
 
 ### **Model ② : Two-Period Lag Fixed Effects Panel Model**
 
+$$
+\frac{\Delta Patent_{i,t}}{Sales_{i,t}} = \alpha_i + \beta_1 \cdot \frac{RD_{i,t-1}}{Sales_{i,t-1}} + \beta_2 \cdot \frac{RD_{i,t-2}}{Sales_{i,t-2}} + \varepsilon_{i,t}
+$$
 
-$$\frac{\Delta Patent_{i,t}}{Sales_{i,t}} = \alpha_i + \beta_1 \cdot \frac{RD_{i,t-1}}{Sales_{i,t-1}} + \beta_2 \cdot \frac{RD_{i,t-2}}{Sales_{i,t-2}} + \varepsilon_{i,t}$$
+**Extended Time Structure**: This model captures both immediate (t-1) and longer-term (t-2) effects of R&D investment on patent generation. The cumulative effect over two periods is measured as
 
-**Extended Time Structure**: This model captures both immediate (t-1) and longer-term (t-2) effects of R&D investment on patent generation. The cumulative effect over two periods is measured as $$\beta_1 + \beta_2$$.
+$$
+\beta_1 + \beta_2
+$$
 
-**Differential Impact Analysis**: The model allows for different impact patterns, where $$\beta_1$$ captures more immediate effects and $$\beta_2$$ captures longer-term research outcomes.
+.
+
+**Differential Impact Analysis**: The model allows for different impact patterns, where
+
+$$
+\beta_1
+$$
+
+ captures more immediate effects and
+
+$$
+\beta_2
+$$
+
+ captures longer-term research outcomes.
 
 ### **Panel Data Methodology**
 
@@ -150,8 +211,9 @@ The regression analysis uses Python's `linearmodels.PanelOLS` with the following
 ### **Statistical Significance Assessment**
 
 The analysis evaluates statistical significance at multiple levels:
+
 - *** p < 0.01 (1% significance level) - Highly significant
-- ** p < 0.05 (5% significance level) - Significant  
+- ** p < 0.05 (5% significance level) - Significant
 - * p < 0.1 (10% significance level) - Marginally significant
 
 ### **Model Performance Evaluation**
@@ -192,7 +254,6 @@ Based on the current analysis framework, potential extensions include:
 ### **Milestone 2**
 
 `notebooks\assignment_group\HW2\Milestone_2.ipynb`
-
 
 ### **Our Special Challenge**
 
