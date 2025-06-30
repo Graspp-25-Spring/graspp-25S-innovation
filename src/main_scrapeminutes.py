@@ -160,7 +160,7 @@ def main():
         except Exception as e:
             print(f"Error processing {k} ({industry}): {e}")
     
-    indic
+    indic= id2industries_dict
     reversed_indic = {v: k for k, v in indic.items()}
     all_df.loc['industry_id'] = [reversed_indic[col] for col in all_df.columns]
     all_df = all_df.loc[['industry_id'] + [idx for idx in all_df.index if idx != 'industry_id']]
@@ -195,7 +195,7 @@ def main():
             all_df.to_csv(checkpoint_path)
         except Exception as e:
             print(f"Error processing {k} ({industry}): {e}")
-    indic
+    indic = id2industries_dict
     reversed_indic = {v: k for k, v in indic.items()}
     all_df.loc['industry_id'] = [reversed_indic[col] for col in all_df.columns]
     all_df = all_df.loc[['industry_id'] + [idx for idx in all_df.index if idx != 'industry_id']]
