@@ -66,7 +66,7 @@ There is a positive correlation between the amount of R&D spending and the numbe
 
 
 - $$i$$ : Industry category $$i$$
-- $$t$$ : Time period (2010 ~ 2021)$$t$$
+- $$t$$ : Time period (2010 ~ 2021) $$t$$
 - $$\Delta Patent_{i,t}$$ : Annual change in patent count for industry $$i$$ in year $$t$$
 - $$Sales_{i,t}$$ : Total sales revenue for industry $$i$$ in year $$t$$
 - $$RD_{i,t}$$ : Total R&D expenditure for industry $$i$$ in year $$t$$
