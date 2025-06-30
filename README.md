@@ -183,22 +183,6 @@ Based on the current analysis framework, potential extensions include:
 
 `notebooks\assignment_group\HW2\Milestone_2.ipynb`
 
-### **Regression Analysis**
-
-`regression.py` - Main regression analysis module implementing:
-- Data preprocessing and panel structure creation
-- Fixed effects panel regression models
-- Statistical testing and diagnostic analysis
-- Results output and interpretation
-
-### **Output Files**
-
-`regression_results.txt` - Comprehensive regression results including:
-- Model specifications and parameter estimates
-- Statistical significance tests
-- Model performance metrics
-- Economic interpretation and policy implications
-
 ### **Our Special Challenge**
 
 `\data\README.md`
